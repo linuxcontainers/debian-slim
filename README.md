@@ -3,7 +3,7 @@
 [![Docker Automated build](https://img.shields.io/docker/automated/linuxcontainers/debian-slim.svg?style=for-the-badge&logo=docker)](https://hub.docker.com/r/linuxcontainers/debian-slim/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/linuxcontainers/debian-slim.svg?style=for-the-badge&logo=docker)](https://hub.docker.com/r/linuxcontainers/debian-slim/)
 [![Docker Stars](https://img.shields.io/docker/stars/linuxcontainers/debian-slim.svg?style=for-the-badge&logo=docker)](https://hub.docker.com/r/linuxcontainers/debian-slim/)
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/linuxcontainers/debian-slim/11.0?logo=docker&style=for-the-badge)
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/linuxcontainers/debian-slim/11?logo=docker&style=for-the-badge)
 
 This Docker image [(linuxcontainers/debian-slim)](https://hub.docker.com/r/linuxcontainers/debian-slim/) is based on the minimal [Debian Slim Linux](https://hub.docker.com/_/debian).
 
