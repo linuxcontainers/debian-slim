@@ -1,0 +1,63 @@
+name: GHCR Manual Publish
+
+on:
+  schedule:
+    - cron: '10 1 6,21 * *'
+  workflow_dispatch:
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 
+
+      - name: Prepare
+        id: prep
+        run: |
+          GHCR_IMAGE=ghcr.io/${{ github.repository_owner }}/debian-slim
+          LATESTTAG=$(git describe --abbrev=0 --tags)
+          VERSION=${LATESTTAG#v}
+          MINOR=${VERSION%.*}
+          MAJOR=${VERSION%%.*}
+          TAGS="${TAGS},${GHCR_IMAGE}:${MAJOR},${GHCR_IMAGE}:${MINOR}"
+          TAGS="${TAGS},${GHCR_IMAGE}:${VERSION},${GHCR_IMAGE}:latest"
+          echo ::set-output name=tags::${TAGS}
+          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=ghcr_image::${GHCR_IMAGE}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+        with:
+          platforms: all
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          config-inline: |
+            [registry."ghrc.io"]
+
+      - name: Login to Github Container Registry
+        uses: docker/login-action@v1 
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          context: .
+          file: ./Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/s390x,linux/386,linux/arm/v6,linux/arm/v7
+          tags: ${{ steps.prep.outputs.tags }}
+          labels: org.opencontainers.image.version=${{ steps.prep.outputs.version }}
