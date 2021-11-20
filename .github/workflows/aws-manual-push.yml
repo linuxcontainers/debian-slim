@@ -27,9 +27,10 @@ jobs:
 
     - name: Prepare
       id: prep
-      run: |
+      env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.REPO_NAME }}
+      run: |
           AWS_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY
           LATESTTAG=$(git describe --abbrev=0 --tags)
           VERSION=${LATESTTAG#v}
