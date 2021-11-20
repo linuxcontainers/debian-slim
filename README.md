@@ -23,10 +23,63 @@ Debian is an operating system which is composed primarily of free and open-sourc
 * Minimal size only, minimal layers
 * Memory usage is minimal on a simple install
 
-## Architectures
+## Docker Tags and Versioning Scheme
 
-* ```:amd64```, ```:x86_64``` - 64 bit Intel/AMD (x86_64/amd64)
+Each image pushed to Docker Hub and the Github Container Registry is tagged as follows:
+* The tag `latest` indicates, well, the latest image.
+* Tags of the form MAJOR.MINOR.PATCH (such as 11.1) indicate the SemVer of 
+  the __Debian__ image used as the base.
+* Tags of the form MAJOR.MINOR (e.g., 11) correspond to the most recent patch level of
+  the __Debian__ image used as the base. For example, if 11.1 is the latest
+  release, then 11 maps to this as well.
+* Tags of the form MAJOR (e.g., 11) correspond to the most recent patch level of
+  the __Debian__ image used as the base, with major corresponding major version. 
+  For example, if 11.1 is the latest release, then 11 maps to this as well.
 
-## Environment Variables:
+[Semantic Versioning](https://semver.org/) uses version numbers of the form: MAJOR.MINOR.PATCH, where differences in MAJOR correspond
+ to incompatible changes, differences in MINOR correspond to introduction of backwards compatible new functionality, and PATCH corres
+ponds to backwards compatible bug fixes.
 
-### Main parameters:
+
+## Installation and Usage
+
+The pre-built image is hosted on both Docker Hub and the Github Container Registry. You can use it in the following ways.
+
+### Docker Pull Command
+
+Pull the latest image from Docker Hub with the following (replace `latest` with 
+a specific version number if you prefer):
+
+```
+docker pull linuxcontainers/debian-slim:latest
+```
+
+Pull from the Github Container Registry with:
+
+```
+docker pull ghcr.io/linuxcontainers/debian-slim:latest
+```
+
+
+### Use as a base image in a Dockerfile
+
+Use as a base image in a Dockerfile (replace `latest` with 
+a specific version number if you prefer):
+
+```Dockerfile
+FROM linuxcontainers/debian-slim:latest
+
+# The rest of your Dockerfile would go here.
+```
+
+Or you can use as a base image (via the Github Container Registry) with:
+
+```Dockerfile
+FROM ghcr.io/linuxcontainers/debian-slim:latest
+
+# The rest of your Dockerfile would go here.
+```
+
+A specific example usage can be found in the [Dockerfile of the generate-sitemap Github action](https://github.com/marketplace/action
+s/generate-sitemap).
+
