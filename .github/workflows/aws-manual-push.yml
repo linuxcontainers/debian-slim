@@ -32,7 +32,7 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.REPO_NAME }}
       run: |
           AWS_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY
-          LATESTTAG=$(git describe --abbrev=0 --tags --depth=1)
+          LATESTTAG=$(git describe --abbrev=0 --tags --always)
           VERSION=${LATESTTAG#v}
           MINOR=${VERSION%.*}
           MAJOR=${VERSION%%.*}
