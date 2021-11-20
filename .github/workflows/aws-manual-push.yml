@@ -1,0 +1,62 @@
+name: AWS Manual Publish
+
+on:
+  schedule:
+    - cron: '10 1 6,21 * *'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-2
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Prepare
+        id: prep
+        run: |
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.REPO_NAME }}
+          AWS_IMAGE=$ECR_REGISTRY/$ECR_REPOSITORY
+          LATESTTAG=$(git describe --abbrev=0 --tags)
+          VERSION=${LATESTTAG#v}
+          MINOR=${VERSION%.*}
+          MAJOR=${VERSION%%.*}
+          TAGS="${TAGS},${AWS_IMAGE}:${MAJOR},${AWS_IMAGE}:${MINOR}"
+          TAGS="${TAGS},${AWS_IMAGE}:${VERSION},${AWS_IMAGE}:latest"
+          echo ::set-output name=tags::${TAGS}
+          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=aws_image::${AWS_IMAGE}
+
+    - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+        with:
+          platforms: all
+
+    - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+    - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          context: .
+          file: ./Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/s390x,linux/386,linux/arm/v6,linux/arm/v7
+          tags: ${{ steps.prep.outputs.tags }}
+          labels: org.opencontainers.image.version=${{ steps.prep.outputs.version }}
