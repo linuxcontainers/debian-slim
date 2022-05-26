@@ -2,8 +2,7 @@ name: GHCR Manual Publish
 
 on:
   schedule:
-    - cron: '10 1 6,21 * *'
-  workflow_dispatch:
+    - cron: '0 0 * * *'
 
 jobs:
   build-push:
