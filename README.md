@@ -27,14 +27,14 @@ Debian is an operating system which is composed primarily of free and open-sourc
 
 Each image pushed to Docker Hub and the Github Container Registry is tagged as follows:
 * The tag `latest` indicates, well, the latest image.
-* Tags of the form MAJOR.MINOR.PATCH (such as 11.4) indicate the SemVer of 
+* Tags of the form MAJOR.MINOR.PATCH (such as 11.5) indicate the SemVer of 
   the __Debian__ image used as the base.
 * Tags of the form MAJOR.MINOR (e.g., 11) correspond to the most recent patch level of
-  the __Debian__ image used as the base. For example, if 11.4 is the latest
+  the __Debian__ image used as the base. For example, if 11.5 is the latest
   release, then 11 maps to this as well.
 * Tags of the form MAJOR (e.g., 11) correspond to the most recent patch level of
   the __Debian__ image used as the base, with major corresponding major version. 
-  For example, if 11.4 is the latest release, then 11 maps to this as well.
+  For example, if 11.5 is the latest release, then 11 maps to this as well.
 
 [Semantic Versioning](https://semver.org/) uses version numbers of the form: MAJOR.MINOR.PATCH, where differences in MAJOR correspond
  to incompatible changes, differences in MINOR correspond to introduction of backwards compatible new functionality, and PATCH corres
