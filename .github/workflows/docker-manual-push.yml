@@ -63,3 +63,12 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/s390x,linux/386,linux/arm/v6,linux/arm/v7
           tags: ${{ steps.prep.outputs.tags }}
           labels: org.opencontainers.image.version=${{ steps.prep.outputs.version }}
+
+        # Note: This uses the password or token
+      - name: Update repo description at Docker Hub
+        uses: peter-evans/dockerhub-description@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: linuxcontainers/debian-slim
+          short-description: Debian Slim Linux in Docker

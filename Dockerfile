@@ -2,7 +2,7 @@
 # Source repository: https://github.com/linuxcontainers/debian-slim
 # Source licensed under the MIT License: https://github.com/linuxcontainers/debian-slim/blob/master/LICENSE
 
-FROM debian:12.4-slim
+FROM debian:12.5-slim
 LABEL maintainer="peter@linuxcontainers.dev" \
     org.opencontainers.image.title="debian-slim" \
     org.opencontainers.image.description="Debian is a Linux distribution that's composed entirely of free and open-source software" \
